@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd linux/
+tag=current
+output_root=/tmp
+output_dir=$output_root/$tag
+echo output_dir $output_dir
+rm -rf $output_dir
+mkdir -p $output_dir
+make distclean
+make O=$output_dir oldconfig
+if [ "$1" = "configure" ]; then
+  make O=$output_dir menuconfig
+fi
+make O=$output_dir bindeb-pkg -j$(grep -c processor /proc/cpuinfo) || true
+dpkg -i $output_root/linux-*.deb
+mv $output_root/linux-*.deb ~/Downloads/
