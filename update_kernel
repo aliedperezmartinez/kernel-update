@@ -1,11 +1,11 @@
- #!/bin/bash
+#!/bin/bash
 
 RELEASES_URL=https://www.kernel.org/releases.json
-version=$1
+
 rm linux.tar.xz
-if [ -z ${version+x} ]
+if [ -z "$1" ]
   then source=$(curl -s $RELEASES_URL | jq -r '.latest_stable.version as $stable_version | .releases[] | select(.version == $stable_version) | .source');
-  else source=$(curl -s $RELEASES_URL | jq -r ".releases[] | select(.version == \"$version\") | .source")
+  else source=$(curl -s $RELEASES_URL | jq -r ".releases[] | select(.version == \"$1\") | .source")
 fi
 
 
